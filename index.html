@@ -2,34 +2,114 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Circle Example</title>
+    <title>Clock</title>
     <style>
-        html {
-            height: 100%;
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin: 0;
             padding: 0;
-            background: seashell;
         }
+
         .circle {
-            width: 200px;
-            height: 200px;
-            background-image: url("image/nature.jpg");            
+            width: 30rem;
+            height: 30rem;     
             border-radius: 50%;
             margin: 40px auto;
             background-size: cover;
-            border: 2px solid rgb(0, 68, 0);
+            border: 15px solid rgb(255, 255, 255);
+            position: relative;
+            padding: 2rem;
         }
 
-        .secondArrow {
-            width: 1px;
-            height: 100px;
-            background-color: #ff0000;
+        .clock-face{
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform: translateY(-3px);
         }
+
+        .arrow {
+            position: absolute;
+            width: 50%;
+            height: 7.5rem; 
+            background: none;
+            background-image: url("image/1.png"); 
+            background-size: contain;
+            background-repeat: no-repeat;
+            top: 39%;
+            left:2%;
+            transform-origin: 95%;
+            transform: rotate(90deg);
+            transition: all 0.05s;
+            transition-timing-function: cubic-bezier(0, 1.99, 0.58, 1);
+            filter: invert(1);  
+        }
+
+
+        #bg-video {
+            position: fixed; 
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            z-index: -1; 
+            object-fit: cover; 
+        }
+
+        .center {
+            height: 2rem;
+            width: 2rem;
+            border-radius: 50%;
+            background-color: #ffffff;
+            position: absolute;
+            top: 48%;
+            left: 46%;
+            z-index: 50;
+        }    
     </style>
 </head>
+
 <body>
+    <video autoplay muted loop id="bg-video">
+        <source src="video/space.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
     <div class="circle">
-        <div class="secondArrow"></div>
+        <div class="clock-face">
+            <div class="center"></div>
+            <div class="arrow arrowHour"></div>
+            <div class="arrow arrowMin"></div>
+            <div class="arrow arrowSec"></div>
+        </div>
     </div>
+
+    <script>
+        const arrowSec = document.querySelector('.arrowSec');
+        const arrowMin = document.querySelector('.arrowMin');
+        const arrowHour = document.querySelector('.arrowHour');
+
+        function setDate() {
+          const now = new Date();
+          const seconds = now.getSeconds();
+          const secondsDegrees = ((seconds/60) * 360) + 90;
+          arrowSec.style.transform = `rotate(${secondsDegrees}deg)`;
+
+          const minutes = now.getMinutes();
+          const minutesDegrees = ((minutes/60) * 360) + 90;
+          arrowMin.style.transform = `rotate(${minutesDegrees}deg)`;
+
+          const hours = now.getHours();
+          const hoursDegrees = ((hours/24) * 360) +90;
+          arrowHour.style.transform = `rotate(${hoursDegrees}deg)`;
+        }
+
+        setInterval(setDate, 1000);
+    </script>
 </body>
 </html>
